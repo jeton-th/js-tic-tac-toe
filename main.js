@@ -5,6 +5,8 @@ const Player = (name, symbol) => ({ name, symbol });
 const player1 = Player('Player 1', 'X');
 const player2 = Player('Player 2', 'O');
 
+const bot = ()
+
 const gameBoard = (() => {
   let board = new Array(9).fill(0);
 
