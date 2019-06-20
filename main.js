@@ -1,20 +1,44 @@
 function play(element) {
+  displayController.setName();
   let player = gameBoard.turn();
   element.disabled = true;
-  element.value = player.symbol
+  element.value = player.symbol;
 
   gameBoard.addMark(element.id, player);
 
-  if(gameBoard.checkWinner()){
-    // disable all buttons
-    console.log(`Game over. Winner is ${player.name}.`);
+  if (gameBoard.checkWinner()) {
+    gameBoard.disable();
+    displayController.winner(player);
   } else if (gameBoard.isFull()) {
-    console.log('We have a tie!');
-  } 
+    displayController.tie();
+  }
+}
+
+function restartGame() {
+  gameBoard.restart();
+  displayController.changeName();
 }
 
 const gameBoard = (() => {
-  const board = new Array(9).fill(0);
+  let board = new Array(9).fill(0);
+
+  const disable = () => {
+    let boxes = document.querySelectorAll('.box');
+
+    boxes.forEach(box => {
+      box.disabled = true;
+    });
+  };
+
+  const restart = () => {
+    let boxes = document.querySelectorAll('.box');
+
+    boxes.forEach(box => {
+      box.disabled = false;
+      box.value = '';
+    });
+    board = new Array(9).fill(0);
+  };
 
   const turn = () => {
     const zero = board.filter(a => a == 0);
@@ -45,15 +69,15 @@ const gameBoard = (() => {
       [2, 5, 8],
       [2, 4, 6],
       [0, 4, 8]
-    ]
+    ];
 
     let winner = false;
-    combos.forEach((combo) => {
-      if(combo.every(e => board[e] == 'X')) winner = true;
-      if(combo.every(e => board[e] == 'O')) winner = true;
-    })
+    combos.forEach(combo => {
+      if (combo.every(e => board[e] == 'X')) winner = true;
+      if (combo.every(e => board[e] == 'O')) winner = true;
+    });
     return winner;
-  }
+  };
 
   const addMark = (index, player) => {
     board[index] = player == player1 ? player1.symbol : player2.symbol;
@@ -64,23 +88,57 @@ const gameBoard = (() => {
     turn,
     addMark,
     isFull,
-    checkWinner
+    checkWinner,
+    disable,
+    restart
   };
 })();
 
 const displayController = (() => {
+  const setName = () => {
+    let name1 = document.querySelector('.name1');
+    player1.name = name1.value;
+    name1.disabled = true;
 
+    let name2 = document.querySelector('.name2');
+    player2.name = name2.value;
+    name2.disabled = true;
+  };
 
+  const winner = player => {
+    document.querySelector('.msg').innerHTML = `Game over. Winner is ${
+      player.name
+    }.`;
+  };
+
+  const tie = () => {
+    document.querySelector('.msg').innerHTML = 'Game over. We have a tie';
+  };
+
+  const changeName = () => {
+    let name1 = document.querySelector('.name1');
+    name1.disabled = false;
+
+    let name2 = document.querySelector('.name2');
+    name2.disabled = false;
+  };
+
+  return {
+    setName,
+    winner,
+    changeName,
+    tie
+  };
 })();
 
 const Player = (name, symbol) => {
-  const getName = () => name;
-  const getSymbol = () => symbol;
+  // const getName = () => name;
+  // const getSymbol = () => symbol;
   return { name, symbol };
 };
 
-let player1 = Player('Jim', 'X');
-let player2 = Player('John', 'O');
+let player1 = Player('Player1', 'X');
+let player2 = Player('Player2;', 'O');
 
 // Player 1 : Symbol will be X, name player1
 // Player 2 : Symbol will be X, name player2
