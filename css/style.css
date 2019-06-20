@@ -16,9 +16,20 @@ html, body {
 
 .display {
     width: 100%;
-    height: 100px;
-    background: lightgray;
+    background: #eeeeee;
     margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    flex-flow: row wrap;
+}
+
+.col {
+    height: 100px;
+    text-align: center;
+}
+
+.msg {
+    margin: 20px;
 }
 
 .board {

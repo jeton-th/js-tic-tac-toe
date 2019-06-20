@@ -17,6 +17,7 @@ function play(element) {
 function restartGame() {
   gameBoard.restart();
   displayController.changeName();
+  displayController.clearMessage();
 }
 
 const gameBoard = (() => {
@@ -97,11 +98,11 @@ const gameBoard = (() => {
 const displayController = (() => {
   const setName = () => {
     let name1 = document.querySelector('.name1');
-    player1.name = name1.value;
+    player1.name = (name1.value) ? name1.value : player1.name;
     name1.disabled = true;
 
     let name2 = document.querySelector('.name2');
-    player2.name = name2.value;
+    player2.name = (name2.value) ? name2.value : player2.name;
     name2.disabled = true;
   };
 
@@ -123,24 +124,22 @@ const displayController = (() => {
     name2.disabled = false;
   };
 
+  const clearMessage = () => {
+    document.querySelector('.msg').innerHTML = '';
+  }
+
   return {
     setName,
     winner,
     changeName,
-    tie
+    tie,
+    clearMessage
   };
 })();
 
 const Player = (name, symbol) => {
-  // const getName = () => name;
-  // const getSymbol = () => symbol;
   return { name, symbol };
 };
 
-let player1 = Player('Player1', 'X');
-let player2 = Player('Player2;', 'O');
-
-// Player 1 : Symbol will be X, name player1
-// Player 2 : Symbol will be X, name player2
-
-// console.log(player2);
+let player1 = Player('Player 1', 'X');
+let player2 = Player('Player 2', 'O');
