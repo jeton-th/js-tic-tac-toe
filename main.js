@@ -1,39 +1,39 @@
-function play(element) {
-  displayController.setName();
-  let player = gameBoard.turn();
-  element.disabled = true;
-  element.value = player.symbol;
+const boxes = document.querySelectorAll('.box');
+boxes.forEach(box => {
+  box.addEventListener('click', () => {
+    displayController.setName();
+    let player = gameBoard.turn();
+    box.disabled = true;
+    box.value = player.symbol;
 
-  gameBoard.addMark(element.id, player);
+    gameBoard.addMark(box.id, player);
 
-  if (gameBoard.checkWinner()) {
-    gameBoard.disable();
-    displayController.winner(player);
-  } else if (gameBoard.isFull()) {
-    displayController.tie();
-  }
-}
+    if (gameBoard.checkWinner()) {
+      gameBoard.disable();
+      displayController.winner(player);
+    } else if (gameBoard.isFull()) {
+      displayController.tie();
+    }
+  })
+})
 
-function restartGame() {
+let restart = document.querySelector('.restart');
+restart.addEventListener('click', () => {
   gameBoard.restart();
   displayController.changeName();
   displayController.clearMessage();
-}
+})
 
 const gameBoard = (() => {
   let board = new Array(9).fill(0);
 
   const disable = () => {
-    let boxes = document.querySelectorAll('.box');
-
     boxes.forEach(box => {
       box.disabled = true;
     });
   };
 
   const restart = () => {
-    let boxes = document.querySelectorAll('.box');
-
     boxes.forEach(box => {
       box.disabled = false;
       box.value = '';
@@ -43,7 +43,6 @@ const gameBoard = (() => {
 
   const turn = () => {
     const zero = board.filter(a => a == 0);
-    console.log(board);
     if (zero.length % 2 == 0) {
       return player2;
     } else {
@@ -107,13 +106,13 @@ const displayController = (() => {
   };
 
   const winner = player => {
-    document.querySelector('.msg').innerHTML = `Game over. Winner is ${
+    document.querySelector('.msg').innerHTML = `Game over. <br> Winner is ${
       player.name
     }.`;
   };
 
   const tie = () => {
-    document.querySelector('.msg').innerHTML = 'Game over. We have a tie';
+    document.querySelector('.msg').innerHTML = 'Game over. <br> We have a tie.';
   };
 
   const changeName = () => {
