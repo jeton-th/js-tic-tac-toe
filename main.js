@@ -1,12 +1,13 @@
 function play(element) {
   let player = gameBoard.turn();
   element.disabled = true;
+  element.value = player.symbol
 
   gameBoard.addMark(element.id, player);
 
   if(gameBoard.checkWinner()){
     // disable all buttons
-    console.log('Winner is ');
+    console.log(`Game over. Winner is ${player.name}.`);
   } else if (gameBoard.isFull()) {
     console.log('We have a tie!');
   } 
@@ -35,28 +36,23 @@ const gameBoard = (() => {
   };
 
   const checkWinner = () => {
-    if(
-      board[0] && board[1] && board[2] == "X" ||
-      board[0] && board[1] && board[2] == "O" ||
-      board[3] && board[4] && board[5] == "X" ||
-      board[3] && board[4] && board[5] == "O" ||
-      board[6] && board[7] && board[8] == "X" ||
-      board[6] && board[7] && board[8] == "O" ||
+    const combos = [
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8],
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8],
+      [2, 4, 6],
+      [0, 4, 8]
+    ]
 
-      board[0] && board[3] && board[6] == "X" ||
-      board[0] && board[3] && board[6] == "O" ||
-      board[1] && board[4] && board[7] == "X" ||
-      board[1] && board[4] && board[7] == "O" ||
-      board[2] && board[5] && board[8] == "X" ||
-      board[2] && board[5] && board[8] == "O" ||
-
-      board[0] && board[4] && board[8] == "X" ||
-      board[0] && board[4] && board[8] == "O" ||
-      board[2] && board[4] && board[6] == "X" ||
-      board[2] && board[4] && board[6] == "O"
-    ) {
-      return true;
-    }
+    let winner = false;
+    combos.forEach((combo) => {
+      if(combo.every(e => board[e] == 'X')) winner = true;
+      if(combo.every(e => board[e] == 'O')) winner = true;
+    })
+    return winner;
   }
 
   const addMark = (index, player) => {
@@ -83,8 +79,8 @@ const Player = (name, symbol) => {
   return { name, symbol };
 };
 
-let player1 = Player('jim', 'X');
-let player2 = Player('john', 'O');
+let player1 = Player('Jim', 'X');
+let player2 = Player('John', 'O');
 
 // Player 1 : Symbol will be X, name player1
 // Player 2 : Symbol will be X, name player2
