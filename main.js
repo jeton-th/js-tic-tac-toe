@@ -14,15 +14,15 @@ boxes.forEach(box => {
     } else if (gameBoard.isFull()) {
       displayController.tie();
     }
-  })
-})
+  });
+});
 
-let restart = document.querySelector('.restart');
+const restart = document.querySelector('.restart');
 restart.addEventListener('click', () => {
   gameBoard.restart();
   displayController.changeName();
   displayController.clearMessage();
-})
+});
 
 const gameBoard = (() => {
   let board = new Array(9).fill(0);
@@ -42,8 +42,8 @@ const gameBoard = (() => {
   };
 
   const turn = () => {
-    const zero = board.filter(a => a == 0);
-    if (zero.length % 2 == 0) {
+    const zero = board.filter(a => a === 0);
+    if (zero.length % 2 === 0) {
       return player2;
     } else {
       return player1;
@@ -51,7 +51,7 @@ const gameBoard = (() => {
   };
 
   const isFull = () => {
-    const zero2 = board.filter(a => a == 0);
+    const zero2 = board.filter(a => a === 0);
     if (zero2.length === 0) {
       return true;
     } else {
@@ -73,8 +73,8 @@ const gameBoard = (() => {
 
     let winner = false;
     combos.forEach(combo => {
-      if (combo.every(e => board[e] == 'X')) winner = true;
-      if (combo.every(e => board[e] == 'O')) winner = true;
+      if (combo.every(e => board[e] === 'X')) winner = true;
+      if (combo.every(e => board[e] === 'O')) winner = true;
     });
     return winner;
   };
@@ -96,12 +96,12 @@ const gameBoard = (() => {
 
 const displayController = (() => {
   const setName = () => {
-    let name1 = document.querySelector('.name1');
-    player1.name = (name1.value) ? name1.value : player1.name;
+    const name1 = document.querySelector('.name1');
+    player1.name = name1.value ? name1.value : player1.name;
     name1.disabled = true;
 
-    let name2 = document.querySelector('.name2');
-    player2.name = (name2.value) ? name2.value : player2.name;
+    const name2 = document.querySelector('.name2');
+    player2.name = name2.value ? name2.value : player2.name;
     name2.disabled = true;
   };
 
@@ -125,7 +125,7 @@ const displayController = (() => {
 
   const clearMessage = () => {
     document.querySelector('.msg').innerHTML = '';
-  }
+  };
 
   return {
     setName,
