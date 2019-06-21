@@ -4,7 +4,7 @@ const restartButton = document.querySelector('.restart');
 
 const Player = (name, symbol) => ({ name, symbol });
 const player1 = Player('Player 1', 'X');
-const player2 = Player('Player 2', 'O');
+const player2 = Player('Player 2', 'Z');
 
 const Board = () => {
   const getBoard = new Array(9).fill(0);
@@ -126,14 +126,14 @@ boxes.forEach((box) => {
     display.setName();
     newBoard.addMark(box.id, player);
 
-
     if (newBoard.checkWinner()) {
+      isBot = false;
       display.disable();
       display.winner(player);
     } else if (newBoard.isFull()) {
+      isBot = false;
       display.tie();
     }
-
 
     if (isBot) {
       bot.play();
@@ -158,14 +158,12 @@ const bot = (() => {
     newBoard.getBoard.forEach((e, i) => {
       if (e === 0) botPlay.push(i);
     });
-    console.log(botPlay);
 
     let markIndex = botPlay[Math.floor(Math.random() * botPlay.length)];
+    newBoard.addMark(markIndex, player2);
     let botMark = document.getElementById(markIndex);
-
-    botMark.disabled = true;
-    console.log(markIndex);
     botMark.value = player2.symbol;
+    botMark.disabled = true;
   };
   return { play };
 })();
