@@ -7,7 +7,7 @@ const player2 = Player('Player 2', 'O');
 
 const bot = (() => {
   const play = () => {
-    let botPlay = [];
+    const botPlay = [];
 
     gameBoard.board.forEach((e, i) => {
       if (e === 0) botPlay.push(i);
@@ -148,11 +148,11 @@ const displayController = (() => {
     changeName,
     tie,
     clearMessage,
-    disablePlayer2
+    disablePlayer2,
   };
 })();
 
-boxes.forEach(box => {
+boxes.forEach((box) => {
   box.addEventListener('click', () => {
     botButton.disabled = true;
     box.disabled = true;
