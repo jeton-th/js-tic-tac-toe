@@ -64,7 +64,6 @@ const gameBoard = (() => {
 
   return {
     board,
-    //combos,
     turn,
     addMark,
     isFull,
