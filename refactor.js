@@ -60,6 +60,12 @@ const display = (() => {
     name2.disabled = true;
   };
 
+  const disablePlayer2 = () => {
+    const name2 = document.querySelector('.name2');
+    name2.value = 'Bot';
+    name2.disabled = true;
+  };
+
   const winner = (player) => {
     document.querySelector('.msg').innerHTML = `Game over. <br> Winner is ${
       player.name
@@ -96,6 +102,7 @@ const display = (() => {
     setName,
     changeName,
     clearMessage,
+    disablePlayer2,
     disable,
     winner,
     tie,
@@ -106,7 +113,12 @@ let newBoard = Board();
 
 boxes.forEach((box) => {
   box.addEventListener('click', () => {
-    const player = newBoard.getBoard.filter(a => a === 0).length % 2 === 0 ? player2 : player1;
+    botButton.disabled = true;
+    let player = newBoard.getBoard.filter(a => a === 0).length % 2 === 0 ? player2 : player1;
+
+    if (isBot) {
+      player = player1;
+    }
 
     box.disabled = true;
     box.value = player.symbol;
@@ -114,18 +126,55 @@ boxes.forEach((box) => {
     display.setName();
     newBoard.addMark(box.id, player);
 
+
     if (newBoard.checkWinner()) {
       display.disable();
       display.winner(player);
     } else if (newBoard.isFull()) {
       display.tie();
     }
+
+
+    if (isBot) {
+      bot.play();
+    }
   });
 });
 
 restartButton.addEventListener('click', () => {
   newBoard = Board();
-
+  botButton.disabled = false;
   display.changeName();
   display.clearMessage();
+});
+
+
+// Bot addition
+
+const bot = (() => {
+  const play = () => {
+    const botPlay = [];
+
+    newBoard.getBoard.forEach((e, i) => {
+      if (e === 0) botPlay.push(i);
+    });
+    console.log(botPlay);
+
+    let markIndex = botPlay[Math.floor(Math.random() * botPlay.length)];
+    let botMark = document.getElementById(markIndex);
+
+    botMark.disabled = true;
+    console.log(markIndex);
+    botMark.value = player2.symbol;
+  };
+  return { play };
+})();
+
+const botButton = document.querySelector('.bot');
+const name2 = document.querySelector('.name2');
+let isBot = false;
+
+botButton.addEventListener('click', () => {
+  display.disablePlayer2();
+  isBot = true;
 });
