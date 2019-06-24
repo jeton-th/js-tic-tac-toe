@@ -6,13 +6,18 @@ const Player = (name, symbol) => {
   const moves = [];
   const play = (index, board) => {
     board.addMark(index, this.symbol);
-
-    moves.push(index);
+    moves.push(parseInt(index, 10));
   };
-  return { name, symbol, moves, play };
+
+  return {
+    name,
+    symbol,
+    moves,
+    play,
+  };
 };
-const player1 = Player('Player 1', 'X');
-const player2 = Player('Player 2', 'O');
+let player1 = Player('Player 1', 'X');
+let player2 = Player('Player 2', 'O');
 
 const Board = () => {
   const getBoard = new Array(9).fill(0);
@@ -24,31 +29,12 @@ const Board = () => {
     [1, 4, 7],
     [2, 5, 8],
     [2, 4, 6],
-    [0, 4, 8]
+    [0, 4, 8],
   ];
 
-  const addMark = (index, symbol) => (getBoard[index] = symbol); // board is the newBoard
-  // {
-  //   // getBoard[index] = player === player1 ? player1.symbol : player2.symbol;
-  // };
+  const addMark = (index, symbol) => { (getBoard[index] = symbol); };
 
-  // const checkWinner = () => {
-  //   let winner = false;
-  //   combos.forEach(combo => {
-  //     if (combo.every(e => getBoard[e] === 'X')) winner = true;
-  //     if (combo.every(e => getBoard[e] === 'O')) winner = true;
-  //   });
-  //   return winner;
-  // };
-
-  // board factory
-  checkWinner = playerMoves => {
-    playerMoves = playerMoves.map(e => parseInt(e));
-
-    return combos.some(combo => {
-      return combo.every(e => playerMoves.includes(e));
-    });
-  };
+  const checkWinner = playerMoves => combos.some(combo => combo.every(e => playerMoves.includes(e)));
 
   const isFull = () => {
     const zero2 = getBoard.filter(a => a === 0);
@@ -63,7 +49,7 @@ const Board = () => {
     combos,
     addMark,
     checkWinner,
-    isFull
+    isFull,
   };
 };
 
@@ -78,7 +64,7 @@ const display = (() => {
     name2.disabled = true;
   };
 
-  const winner = player => {
+  const winner = (player) => {
     document.querySelector('.msg').innerHTML = `Game over. <br> Winner is ${
       player.name
     }.`;
@@ -98,14 +84,14 @@ const display = (() => {
 
   const clearMessage = () => {
     document.querySelector('.msg').innerHTML = '';
-    boxes.forEach(box => {
+    boxes.forEach((box) => {
       box.disabled = false;
       box.value = '';
     });
   };
 
   const disable = () => {
-    boxes.forEach(box => {
+    boxes.forEach((box) => {
       box.disabled = true;
     });
   };
@@ -116,18 +102,17 @@ const display = (() => {
     clearMessage,
     disable,
     winner,
-    tie
+    tie,
   };
 })();
 
 let newBoard = Board();
 
-boxes.forEach(box => {
+boxes.forEach((box) => {
   box.addEventListener('click', () => {
-    const player =
-      newBoard.getBoard.filter(a => a === 0).length % 2 === 0
-        ? player2
-        : player1;
+    const player = newBoard.getBoard.filter(a => a === 0).length % 2 === 0
+      ? player2
+      : player1;
 
     box.disabled = true;
     box.value = player.symbol;
@@ -146,6 +131,8 @@ boxes.forEach(box => {
 
 restartButton.addEventListener('click', () => {
   newBoard = Board();
+  player1 = Player('Player 1', 'X');
+  player2 = Player('Player 2', 'O');
 
   display.changeName();
   display.clearMessage();
